@@ -14,6 +14,9 @@ typedef struct {
 
   CSV_READER_HkPacket_t hk_packet;
 
+  /* mensaje publicado al SB con los datos crudos del ultimo CSV leido */
+  CSV_READER_DataTlm_t data_tlm;
+
   /* last CSV file parsed into memory, row-major */
   float  data[CSV_READER_MAX_ROWS][CSV_READER_MAX_COLS];
 } CSV_READER_GlobalApp_t;
@@ -29,5 +32,6 @@ void CSV_READER_ResetCounters(void);
 void CSV_READER_ReadFile(const char *file_name);
 
 void CSV_READER_SendHk(void);
+void CSV_READER_SendData(void);
 
 #endif

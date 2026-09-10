@@ -34,6 +34,12 @@ CFE_Status_t CSV_READER_Init(void)
     CFE_EVS_SendEvent(CSV_READER_INIT_FAILURE_EID, CFE_EVS_EventType_ERROR,
                        "CSV_READER: Error initializing HK msg, RC = 0x%08lX", (unsigned long)status);
 
+  status = CFE_MSG_Init(CFE_MSG_PTR(CSV_READER_Global.data_tlm.telemetry_header),
+                         CFE_SB_ValueToMsgId(CSV_READER_DATA_TLM_MID), sizeof(CSV_READER_Global.data_tlm));
+  if (status != CFE_SUCCESS)
+    CFE_EVS_SendEvent(CSV_READER_INIT_FAILURE_EID, CFE_EVS_EventType_ERROR,
+                       "CSV_READER: Error initializing Data msg, RC = 0x%08lX", (unsigned long)status);
+
   status = CFE_SB_CreatePipe(&CSV_READER_Global.cmd_pipe, CSV_READER_PIPE_DEPTH, CSV_READER_PIPE_NAME);
   if (status != CFE_SUCCESS)
     CFE_EVS_SendEvent(CSV_READER_INIT_FAILURE_EID, CFE_EVS_EventType_ERROR,
@@ -267,6 +273,13 @@ void CSV_READER_ReadFile(const char *file_name)
       printf("\n");
     }
     printf("CSV_READER: sum=%.4f min=%.4f max=%.4f\n", sum, min_val, max_val);
+
+    /* Publicar la matriz al Software Bus para que otras apps la ingieran
+    ** suscribiendose a CSV_READER_DATA_TLM_MID con su propio pipe. */
+    CSV_READER_Global.data_tlm.rows = rows;
+    CSV_READER_Global.data_tlm.cols = max_cols_seen;
+    memcpy(CSV_READER_Global.data_tlm.data, CSV_READER_Global.data, sizeof(CSV_READER_Global.data_tlm.data));
+    CSV_READER_SendData();
   }
   else
   {
@@ -284,4 +297,15 @@ void CSV_READER_SendHk(void)
   if (status != CFE_SUCCESS)
     CFE_EVS_SendEvent(CSV_READER_HK_TRANSMIT_ERR_EID, CFE_EVS_EventType_ERROR,
                        "CSV_READER: HK transmit error, RC = 0x%08lX", (unsigned long)status);
+}
+
+void CSV_READER_SendData(void)
+{
+  int32 status;
+
+  CFE_SB_TimeStampMsg(CFE_MSG_PTR(CSV_READER_Global.data_tlm.telemetry_header));
+  status = CFE_SB_TransmitMsg(CFE_MSG_PTR(CSV_READER_Global.data_tlm.telemetry_header), true);
+  if (status != CFE_SUCCESS)
+    CFE_EVS_SendEvent(CSV_READER_HK_TRANSMIT_ERR_EID, CFE_EVS_EventType_ERROR,
+                       "CSV_READER: Data transmit error, RC = 0x%08lX", (unsigned long)status);
 }

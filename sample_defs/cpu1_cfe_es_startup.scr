@@ -11,8 +11,10 @@ CFE_APP, sch_lab,     SCH_LAB_AppMain,    SCH_LAB,      80,   16384, 0x0, 0;
 CFE_APP, telecom,     TELECOM_AppMain,    TELECOM,      70,   16384, 0x0, 0;
 CFE_APP, obc_hk,      OBC_HK_AppMain,     OBC_HK,       90,   16384, 0x0, 0;
 
-CFE_APP, sample_app_rz1, RZ1_APP_Main,    RZ1_APP,      65,   16384, 0x0, 0;
-CFE_APP, sample_app_rz2, RZ2_APP_Main,    RZ2_APP,      66,   16384, 0x0, 0;
+CFE_APP, csv_reader,  CSV_READER_AppMain, CSV_READER,   85,   16384, 0x0, 0;
+
+!CFE_APP, sample_app_rz1, RZ1_APP_Main,    RZ1_APP,      65,   16384, 0x0, 0;
+!CFE_APP, sample_app_rz2, RZ2_APP_Main,    RZ2_APP,      66,   16384, 0x0, 0;
 
 !
 ! COMMS RZ1<->RZ2: las dos entradas de arriba (rz1_app, rz2_app) hacen que

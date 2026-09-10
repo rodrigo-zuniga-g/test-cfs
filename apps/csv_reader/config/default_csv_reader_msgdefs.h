@@ -35,4 +35,16 @@ typedef struct {
   char   last_file[CSV_READER_FILENAME_LEN];
 } CSV_READER_HkPacket_t;
 
+/* Mensaje publicado al Software Bus con los datos crudos parseados del
+** CSV, para que otras apps se suscriban (via su propio pipe) e ingieran
+** la matriz completa. */
+typedef struct {
+  CFE_MSG_TelemetryHeader_t telemetry_header;
+
+  uint32 rows;
+  uint32 cols;
+
+  float  data[CSV_READER_MAX_ROWS][CSV_READER_MAX_COLS];
+} CSV_READER_DataTlm_t;
+
 #endif

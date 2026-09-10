@@ -122,8 +122,8 @@ SET(OBC_PLATFORM_LINUX 1)
 # OSAL_CONFIG_DEBUG_PERMISSIVE_MODE (ver sample_defs/native_osconfig.cmake).
 SET(cpu1_PLATFORM "default" "native" "cpu1")
 SET(cpu1_PROCESSORID 1)
-SET(cpu1_APPLIST ci_lab to_lab sch_lab telecom obc_hk obc_hw_lib sample_app_rz1 sample_app_rz2)
-SET(cpu1_FILELIST cfe_es_startup.scr)
+SET(cpu1_APPLIST ci_lab to_lab sch_lab telecom obc_hk obc_hw_lib csv_reader)
+SET(cpu1_FILELIST cfe_es_startup.scr csv_reader_data.csv)
 SET(cpu1_SYSTEM i686-linux-gnu)
 
 # CPU2 example.  This is not built by default anymore but
